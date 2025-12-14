@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="./assets/bearded-nvim.png" style="max-height:150px;">
+  <img src="./assets/bearded-nvim.png" height="150px">
   <h2>Bearded Theme for <a href="https://github.com/neovim/neovim">Neovim</a></h2>
   <p>
     <a href="https://github.com/Ferouk/bearded-nvim/stargazers">
