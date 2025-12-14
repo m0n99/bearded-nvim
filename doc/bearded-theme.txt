@@ -1,0 +1,103 @@
+*bearded-theme.txt*  Bearded Theme for Neovim
+
+CONTENTS~
+  1. Overview........................................|bearded-theme-overview|
+  2. Install.........................................|bearded-theme-install|
+  3. Usage..........................................|bearded-theme-usage|
+  4. Options........................................|bearded-theme-options|
+  5. Flavors........................................|bearded-theme-flavors|
+  6. Commands.......................................|bearded-theme-commands|
+
+================================================================================
+1. Overview~                                                      *bearded-theme-overview*
+Bearded Theme is a Neovim colorscheme port of the VS Code Bearded Theme, with
+multiple flavors (dark, light, high-contrast). Upstream design by BeardedBear.
+
+================================================================================
+2. Install~                                                       *bearded-theme-install*
+Lazy:
+>
+  {
+    "Ferouk/bearded-nvim",
+    name = "bearded",
+    priority = 1000,
+    build = function()
+      local doc = vim.fs.joinpath(vim.fn.stdpath("data"), "lazy", "bearded", "doc")
+      pcall(vim.cmd, "helptags " .. doc)
+    end,
+    config = function()
+      require("bearded").setup({ flavor = "arc" })
+      vim.cmd.colorscheme("bearded")
+    end,
+  }
+<
+
+Packer:
+>
+  use({
+    "Ferouk/bearded-nvim",
+    run = ":helptags ALL",
+    config = function()
+      require("bearded").setup({ flavor = "arc" })
+      vim.cmd.colorscheme("bearded")
+    end,
+  })
+<
+
+================================================================================
+2. Usage~                                                         *bearded-theme-usage*
+Lua setup:
+>
+  require("bearded").setup({
+    flavor = "arc",            -- any slug from |bearded-theme-flavors|
+    transparent = false,
+    dim_inactive = false,
+    terminal_colors = true,
+  })
+  vim.cmd("colorscheme bearded")
+<
+
+Per-flavor commands (after running the generator):
+>
+  :colorscheme bearded-arc
+<
+
+================================================================================
+3. Options~                                                       *bearded-theme-options*
+  flavor           (string)  Default flavor slug.
+  transparent      (bool)    If true, uses NONE backgrounds where possible.
+  dim_inactive     (bool)    Dim inactive windows.
+  terminal_colors  (bool)    Populate terminal_color_* globals.
+  bold             (bool)    Allow bold text (defaults true).
+  italic           (bool)    Allow italics (defaults true).
+  on_highlights    (func)    Callback(set, palette, opts) to override highlights.
+
+================================================================================
+4. Flavors~                                                       *bearded-theme-flavors*
+By family (slugs):
+  Arc: arc, arc-blueberry, arc-eggplant, arc-eolstorm, arc-reversed
+  Aquarelle: aquarelle-cymbidium, aquarelle-hydrangea, aquarelle-lilac
+  Exotic: altica, earth, coffee, coffee-cream, coffee-reversed, void
+  Black: black-&-amethyst(-soft), black-&-diamond(-soft), black-&-emerald(-soft),
+         black-&-gold(-soft), black-&-ruby(-soft)
+  Classics: classics-anthracite, classics-light
+  Feat: feat-will, feat-webdevcody, feat-gold-d-raynh(-light), feat-mellejulie(-light)
+  High Contrast: hc-ebony, hc-midnightvoid, hc-flurry, hc-wonderland-wood,
+                 hc-brewing-storm, hc-minuit, hc-chocolate-espresso
+  Milkshake: milkshake-vanilla, milkshake-mint, milkshake-raspberry,
+             milkshake-mango, milkshake-blueberry
+  Monokai: monokai-terra, monokai-metallian, monokai-stone, monokai-black, monokai-reversed
+  Solarized/Ocean: oceanic, oceanic-reversed, solarized-dark, solarized-light, solarized-reversed
+  Stained: stained-blue, stained-purple
+  Surprising: surprising-eggplant, surprising-blueberry, surprising-watermelon
+  Other: themanopia, vivid-purple, vivid-black, vivid-light
+
+Use |bearded-theme-commands| to switch: :colorscheme bearded-<slug>
+
+================================================================================
+5. Commands~                                                      *bearded-theme-commands*
+  :colorscheme bearded             Base entrypoint (uses setup flavor).
+  :colorscheme bearded-<slug>      Generated stubs per flavor (run generator first).
+  :BeardedReload <slug>            Reload the colorscheme with the given slug.
+
+vim:tw=78:ts=8:ft=help:norl:

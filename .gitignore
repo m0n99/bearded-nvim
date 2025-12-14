@@ -1,0 +1,19 @@
+# Upstream checkout used for palette generation (not tracked)
+bearded-theme/
+
+# Node / editor
+node_modules/
+.DS_Store
+
+# Lua language server metadata
+.luarc.json
+
+# Neovim artifacts
+.local/
+.cache/
+
+# Generated helptags
+doc/tags
+
+# nvim log
+.nvimlog
