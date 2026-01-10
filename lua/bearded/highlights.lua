@@ -14,6 +14,34 @@ local function normalize_color(color)
   return color
 end
 
+local function blend_hex(foreground, background, alpha)
+  if type(foreground) ~= "string" or type(background) ~= "string" then
+    return foreground
+  end
+  if foreground == "NONE" or background == "NONE" then
+    return foreground
+  end
+  if not foreground:match "^#%x%x%x%x%x%x$" or not background:match "^#%x%x%x%x%x%x$" then
+    return foreground
+  end
+
+  local fr = tonumber(foreground:sub(2, 3), 16)
+  local fg = tonumber(foreground:sub(4, 5), 16)
+  local fb = tonumber(foreground:sub(6, 7), 16)
+  local br = tonumber(background:sub(2, 3), 16)
+  local bg = tonumber(background:sub(4, 5), 16)
+  local bb = tonumber(background:sub(6, 7), 16)
+
+  local function mix(fg_c, bg_c)
+    return math.floor((alpha * fg_c) + ((1 - alpha) * bg_c) + 0.5)
+  end
+
+  local r = mix(fr, br)
+  local g = mix(fg, bg)
+  local b = mix(fb, bb)
+  return string.format("#%02x%02x%02x", r, g, b)
+end
+
 local function set(name, values)
   if values.fg then
     values.fg = normalize_color(values.fg)
@@ -164,7 +192,6 @@ local function ui_groups(ui, colors, levels, opts)
   local accent = colors.purple or colors.blue or primary
   local italic = opts.italic ~= false
   local bold = opts.bold ~= false
-
   local groups = {
     Normal = { fg = fg, bg = bg },
     NormalNC = { fg = fg, bg = bg },
@@ -172,10 +199,10 @@ local function ui_groups(ui, colors, levels, opts)
     FloatBorder = { fg = dim, bg = bg_alt },
     FloatTitle = { fg = primary, bg = bg_alt, bold = bold },
     Comment = { fg = dim, italic = italic },
-    CursorLine = { bg = bg_mid },
-    CursorColumn = { bg = bg_mid },
-    CursorLineNr = { fg = primary, bg = bg_mid, bold = bold },
-    LineNr = { fg = dim, bg = bg_mid },
+    CursorLine = { bg = bg == "NONE" and bg_mid or blend_hex(primary, bg, 0.06) },
+    CursorColumn = { bg = bg == "NONE" and bg_mid or blend_hex(primary, bg, 0.06) },
+    CursorLineNr = { fg = bg == "NONE" and primary or blend_hex(fg, bg_mid, 0.6), bg = bg_mid, bold = bold },
+    LineNr = { fg = bg == "NONE" and dim or blend_hex(fg, bg, 0.25), bg = bg_mid },
     Visual = { bg = ui.primaryalt or "#444444" },
     Search = { fg = bg, bg = levels.warning or colors.orange },
     IncSearch = { fg = bg, bg = levels.info or colors.blue, bold = bold },
@@ -276,6 +303,10 @@ local function plugin_groups(colors, ui, levels)
     CmpItemKindClass = { fg = colors.purple },
     CmpItemKindInterface = { fg = colors.purple },
     CmpItemKindModule = { fg = colors.teal },
+
+    -- Blink Indent
+    BlinkIndent = { fg = blend_hex(ui.defaultalt or ui.default or colors.blue or "#666666", ui.uibackground, 0.2) },
+    BlinkIndentScope = { fg = blend_hex(ui.defaultalt or ui.default or colors.blue or "#666666", ui.uibackground, 0.8) },
   }
 
   merge(g, neo_tree)
