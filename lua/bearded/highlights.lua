@@ -170,6 +170,10 @@ local function diagnostics(levels, colors, ui)
     DiagnosticWarn = { fg = levels.warning or colors.orange },
     DiagnosticInfo = { fg = levels.info or colors.blue },
     DiagnosticHint = { fg = colors.purple or colors.teal },
+    DiagnosticUnnecessary = {
+      fg = ui.uibackground == "NONE" and (ui.defaultalt or "#5a5a5a")
+        or blend_hex(ui.default or "#ffffff", ui.uibackground, 0.67),
+    },
     DiagnosticUnderlineError = underline(levels.danger or colors.red),
     DiagnosticUnderlineWarn = underline(levels.warning or colors.orange),
     DiagnosticUnderlineInfo = underline(levels.info or colors.blue),
@@ -203,7 +207,7 @@ local function ui_groups(ui, colors, levels, opts)
     CursorColumn = { bg = bg == "NONE" and bg_mid or blend_hex(primary, bg, 0.06) },
     CursorLineNr = { fg = bg == "NONE" and primary or blend_hex(fg, bg_mid, 0.6), bg = bg_mid, bold = bold },
     LineNr = { fg = bg == "NONE" and dim or blend_hex(fg, bg, 0.25), bg = bg_mid },
-    Visual = { bg = ui.primaryalt or "#444444" },
+    Visual = { bg = bg == "NONE" and (ui.primaryalt or "#444444") or blend_hex(primary, bg, 0.3) },
     Search = { fg = bg, bg = levels.warning or colors.orange },
     IncSearch = { fg = bg, bg = levels.info or colors.blue, bold = bold },
     MatchParen = { fg = accent, bold = bold },
