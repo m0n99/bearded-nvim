@@ -205,7 +205,11 @@ local function ui_groups(ui, colors, levels, opts)
     Comment = { fg = dim, italic = italic },
     CursorLine = { bg = bg == "NONE" and bg_mid or blend_hex(primary, bg, 0.06) },
     CursorColumn = { bg = bg == "NONE" and bg_mid or blend_hex(primary, bg, 0.06) },
-    CursorLineNr = { fg = bg == "NONE" and primary or blend_hex(fg, bg_mid, 0.6), bg = bg_mid, bold = bold },
+    CursorLineNr = {
+      fg = bg == "NONE" and primary or blend_hex(fg, bg_mid, 0.6),
+      bg = bg_mid,
+      bold = bold,
+    },
     LineNr = { fg = bg == "NONE" and dim or blend_hex(fg, bg, 0.25), bg = bg_mid },
     Visual = { bg = bg == "NONE" and (ui.primaryalt or "#444444") or blend_hex(primary, bg, 0.3) },
     Search = { fg = bg, bg = levels.warning or colors.orange },
@@ -309,8 +313,12 @@ local function plugin_groups(colors, ui, levels)
     CmpItemKindModule = { fg = colors.teal },
 
     -- Blink Indent
-    BlinkIndent = { fg = blend_hex(ui.defaultalt or ui.default or colors.blue or "#666666", ui.uibackground, 0.2) },
-    BlinkIndentScope = { fg = blend_hex(ui.defaultalt or ui.default or colors.blue or "#666666", ui.uibackground, 0.8) },
+    BlinkIndent = {
+      fg = blend_hex(ui.defaultalt or ui.default or colors.blue or "#666666", ui.uibackground, 0.2),
+    },
+    BlinkIndentScope = {
+      fg = blend_hex(ui.defaultalt or ui.default or colors.blue or "#666666", ui.uibackground, 0.8),
+    },
   }
 
   merge(g, neo_tree)
